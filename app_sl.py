@@ -81,13 +81,13 @@ def start():
     game = crew.kickoff()
     
     
-    story = generate_story_task.raw_output
-    dataset = generate_dataset_task.raw_output
-    questions = generate_questions_task.raw_output
+    story = generate_story.raw_output
+    dataset = generate_dataset.raw_output
+    questions = generate_questions.raw_output
     
 
     st.markdown(story)
     st.markdown(dataset)
     st.markdown(questions)
     
-start()
+st.button("Make Game", type="primary", on_click=start)
