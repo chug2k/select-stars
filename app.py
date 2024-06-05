@@ -91,9 +91,9 @@ def shit():
     run_sync(crew.kickoff())
     print("Kickoff completed:", result)
 
-    story = generate_story_task.raw_output
-    dataset = generate_dataset_task.raw_output
-    questions = generate_questions_task.raw_output
+    story = generate_story_task.output.raw_output
+    dataset = generate_dataset_task.output.raw_output
+    questions = generate_questions_task.output.raw_output
     
 
     cl.Message(content=story).send()
@@ -104,6 +104,6 @@ def shit():
 @cl.on_chat_start
 async def start():
     # Sending an action button within a chatbot message
-    run_sync(shit())
+    run_sync()
         
     await cl.Message(content="Are you ready to learn SQL the fun way?", actions=actions).send()

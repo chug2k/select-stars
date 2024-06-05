@@ -81,9 +81,9 @@ def start():
     game = crew.kickoff()
     
     
-    story = generate_story.raw_output
-    dataset = generate_dataset.raw_output
-    questions = generate_questions.raw_output
+    story = generate_story.output.raw_output
+    dataset = generate_dataset.output.raw_output
+    questions = generate_questions.output.raw_output
     
 
     st.markdown(story)
