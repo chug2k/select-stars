@@ -2,6 +2,7 @@ from textwrap import dedent
 from crewai import Task
 
 class GameTasks():
+    
 	def generate_story_task(self, agent):
 		return Task(description=dedent(f"""\
             Create a game narrative for a game that teaches people SQL. The game should show progression 
