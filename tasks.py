@@ -29,8 +29,11 @@ class GameTasks():
         The narrative is given from the game designer in the previous step.
         """),
         expected_output=dedent("""\
-        The full SQL commands to run to create the relevant tables and insert statements.
-        Give the SQL CREATE TABLE commands first, and then the SQL INSERT commands second.
+        Only the full SQL commands to run to create the relevant tables and insert statements.
+        Generate the output in SQLite format to be executed in a database management system.
+        Don't use any markdown or code block formatting in the output. 
+        Do not include anything other than SQL commands, all ending with a ;. 
+        Write all the SQL commands with TEXT field within double quotes.
         """),
         agent=agent,
         callback=callback

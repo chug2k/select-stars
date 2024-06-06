@@ -41,7 +41,7 @@ class GameCrew:
                 self.generate_story,
                 # generate_level,
                 self.generate_dataset,
-                # self.generate_questions,
+                self.generate_questions,
                 # generate_solutions,
                 # check_solutions
             ],
