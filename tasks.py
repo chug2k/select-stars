@@ -3,7 +3,7 @@ from crewai import Task
 
 class GameTasks():
     
-	def generate_story_task(self, agent):
+	def generate_story_task(self, agent, callback):
 		return Task(description=dedent(f"""\
             Create a game narrative for a game that teaches people SQL. The game should show progression 
             through not only the game's narrative, but also through the SQL concepts. We will only focus
@@ -15,10 +15,11 @@ class GameTasks():
             with a satisfying conclusion. Do not choose narratives involving rebellion, an ancient artifact, an oracle, 
             hackers, powerful corporations, or artificial intelligence."""),
             expected_output="A detailed game narrative that incorporates SQL querying concepts within a chosen genre's storyline without involving restricted themes.",
-			agent=agent
+			agent=agent,
+			callback=callback
 		)
 
-	def generate_dataset_task(self, agent):
+	def generate_dataset_task(self, agent, callback):
 		return Task(description=dedent("""\
         We are creating a level for a game that teaches people SQL. To go through SQL, we need to create
         a sample dataset, with sufficient queries. Generate a dataset that is relevant to the narrative.
@@ -31,10 +32,11 @@ class GameTasks():
         The full SQL commands to run to create the relevant tables and insert statements.
         Give the SQL CREATE TABLE commands first, and then the SQL INSERT commands second.
         """),
-        agent=agent
+        agent=agent,
+        callback=callback
     )
 
-	def generate_questions_task(self, agent):
+	def generate_questions_task(self, agent, callback):
 		return Task(description=dedent(f"""\
 			You are creating 10 questions to teach people SQL. The questions should start easy,
             and then get more complicated. The questions should be based on the following tables,
@@ -45,5 +47,6 @@ class GameTasks():
             SQL concept the player is learning, and then a fun success message when the player successfully
             solves the question.
 			"""),
-			agent=agent
+			agent=agent,
+			callback=callback
 		)
