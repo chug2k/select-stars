@@ -1,2 +1,7 @@
 .env
 __pycache__/*
+# Ignore Environment Variables and venv
+.venv
+.env
+
+
