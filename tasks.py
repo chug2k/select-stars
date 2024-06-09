@@ -13,8 +13,12 @@ class GameTasks():
             fantasy like Harry Potter, adventure like Pirates of the Carribean, or romance like Titanic. Choose
             one of the above and create a narrative that offers a typical hero's journey,
             with a satisfying conclusion. Do not choose narratives involving rebellion, an ancient artifact, an oracle, 
-            hackers, powerful corporations, or artificial intelligence."""),
-            expected_output="A detailed game narrative that incorporates SQL querying concepts within a chosen genre's storyline without involving restricted themes.",
+            hackers, powerful corporations, or artificial intelligence.
+            """),
+            expected_output=dedent(f"""\
+            Intro text to present to the player to familiarize them with the game world, explain their motivations, 
+            and kick off the game. Do not preface with Intro Text:, just give the text to present to the player. 
+            """),
 			agent=agent,
 			callback=callback
 		)
@@ -45,10 +49,19 @@ class GameTasks():
             and then get more complicated. The questions should be based on the following tables,
             given in the context, from the previous step."""),
             expected_output=dedent("""\
-            Your Final answer must be ten questions. For each question, generate a fun intro text 
-            explaining to the player why this SQL question fits into the narrative, information about what 
-            SQL concept the player is learning, and then a fun success message when the player successfully
-            solves the question.
+            Your Final answer must a syntactically correct YAML of ten questions. Do not include markdown formatting, 
+            generate YAML only. Follow the format given below. 
+            
+            questions:
+                - intro: "We'll need help to defeat the Maleficient Horde. Help us recruit a fellowship of the five most powerful wizards!"
+                  prompt: "Find the five most powerful wizards."
+                  solution: "SELECT * from wizards ORDER BY power DESC LIMIT 5"
+                  success: "We've recruited the five most powerful wizards! Now we can defeat the Maleficient Horde!"
+                    
+            The intro text should be fun and engaging, and it should be a good fit for the narrative.
+            The prompt should be a good fit for the narrative, and it should be a good fit for the SQL concept.
+            The solution should be clean, simple SQL that solves the question, and be instructional. 
+            The success message should be fun and engaging, and it should be a good fit for the narrative, and transition us into the next question.
 			"""),
 			agent=agent,
 			callback=callback

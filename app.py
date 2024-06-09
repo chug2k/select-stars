@@ -8,6 +8,10 @@ from chainlit.playground.providers.openai import ChatOpenAI
 from chainlit import run_sync, make_async
 from game_crew import GameCrew
 import sqlite3
+import yaml
+
+DEBUG = True
+from game_content import story_text, dataset_text, questions_text
 
 class GameState:
     def __init__(self):
@@ -16,6 +20,9 @@ class GameState:
         self.questions = []
         self.current_question = 0
         self.db = sqlite3.connect(":memory:", check_same_thread=False)
+    
+    def get_current_question(self):
+        return self.questions[self.current_question]
 
 # Create a global instance of AppState
 game_state = GameState()
@@ -39,37 +46,102 @@ def bootstrap_db():
 async_bootstrap_db = make_async(bootstrap_db)
 
 async def on_story(output):
-    game_state.story = output.raw_output
+    
+    if(DEBUG):
+        game_state.story = story_text   
+    else:
+        game_state.story = output.raw_output
     # Block the rest of the crew from executing their tasks
     # Until we've gotten back to the user with the story. 
     # This run_sync ensures this cl.Message gets out ahead of the other
     # OpenAI calls that are happening from CrewAI.
     # I think this makes things much more responsive! 
-    run_sync(cl.Message(content=output.raw_output).send())
-    
-    
+    run_sync(cl.Message(content=game_state.story).send())
+
+def generate_markdown_summary():
+    with game_state.db:
+        cursor = game_state.db.cursor()
+            # List all tables
+        cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+        tables = cursor.fetchall()
+        
+        markdown = "# Database Summary\n\n"
+        
+        for table in tables:
+            table_name = table[0]
+            markdown += f"## Table: {table_name}\n\n"
+            
+            # Show the schema of the table
+            cursor.execute(f"PRAGMA table_info({table_name});")
+            schema = cursor.fetchall()
+            markdown += "| Column Name | Data Type |\n"
+            markdown += "|-------------|-----------|\n"
+            for column in schema:
+                markdown += f"| {column[1]} | {column[2]} |\n"
+            
+            markdown += "\n"
+            
+            # Show the contents of the table
+            cursor.execute(f"SELECT * FROM {table_name};")
+            rows = cursor.fetchall()
+            
+            if rows:
+                # Get column names
+                column_names = [description[0] for description in cursor.description]
+                markdown += "| " + " | ".join(column_names) + " |\n"
+                markdown += "| " + " | ".join(["-" * len(name) for name in column_names]) + " |\n"
+                
+                for row in rows:
+                    markdown += "| " + " | ".join(map(str, row)) + " |\n"
+            else:
+                markdown += "No data available in this table.\n"
+            
+            markdown += "\n"
+        
+    return markdown
 async def on_dataset(output):
-    game_state.dataset = output.raw_output
+    if(DEBUG):
+        game_state.dataset = dataset_text
+    else:
+        game_state.dataset = output.raw_output
     await async_bootstrap_db()
     await cl.Message(content="Database is ready for queries!").send()
 
 async def on_questions(output):
-    game_state.questions = output.raw_output
+    if(DEBUG):
+        game_state.questions = yaml.safe_load(questions_text)['questions']
+    else:
+        game_state.questions = yaml.safe_load(output.raw_output)['questions']
     print("Questions! Received!")
-    await cl.Message(content=game_state.questions[game_state.current_question]).send()
+    print(game_state.questions)
+    current_question = game_state.get_current_question()
+    msg_content = current_question['intro'] + "\n" + current_question['prompt']
+    await cl.Message(content=msg_content, disable_feedback=True, actions=[
+        cl.Action(name="Show Tables", value="example_value", description="Describe Tables")    
+    ]).send()
 
-@cl.action_callback("action_button")
+@cl.action_callback("Show Tables")
+async def show_tables():
+    await cl.Message(content=generate_markdown_summary()).send()
+
+@cl.action_callback("Start Quest")
 async def start():
-    crew = GameCrew(on_story, on_dataset, on_questions)
-    crew.start_game()
+    if(DEBUG):
+        await on_story(story_text)
+        await on_dataset(dataset_text)
+        await on_questions(questions_text)
+    else:
+        crew = GameCrew(on_story, on_dataset, on_questions)
+        crew.start_game()
     
 @cl.on_chat_start
 async def start():
     # Sending an action button within a chatbot message
     actions = [
-        cl.Action(name="action_button", value="example_value", description="Enter the world")
+        cl.Action(name="Start Quest", value="example_value", description="Enter the world")
     ]
-    await cl.Message(content="Click here to start", actions=actions).send()
+    await cl.Message(content="Welcome to SQL Quest! Click Start Quest to begin.", actions=actions).send()
+
 
 @cl.step
 async def check_sql(query):
@@ -78,6 +150,21 @@ async def check_sql(query):
         cur.execute(query)
         output = cur.fetchall()
         await cl.Message(content=str(output)).send()
+        # My algo: run the solution, see if this output is equivalent.
+        solution = game_state.get_current_question()['solution']
+        expected_output = cur.execute(solution).fetchall()
+        if(output == expected_output):
+            game_state.current_question = game_state.current_question + 1
+            # TODO: Uh, check to see if we're at the end.
+            await cl.Message(game_state.get_current_question()['success']).send()
+            # TODO - refactor to make this cleaner, this is ai autocomplete
+            current_question = game_state.get_current_question()
+            msg_content = current_question['intro'] + "\n" + current_question['prompt']
+            await cl.Message(content=msg_content, disable_feedback=True, actions=[
+                cl.Action(name="Show Tables", value="example_value", description="Describe Tables")    
+            ]).send()
+        else:
+            await cl.Message(content=f"Try Again Idiot! Your output: {output} but expected {str(expected_output)}").send()
 
 @cl.on_message
 async def on_message(message):
