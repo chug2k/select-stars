@@ -9,10 +9,12 @@ right now DEBUG is on, which loads my manually copied and pasted output from gam
 
 
 ### TODO: 
-[x] When people answer, check to see if the answer is right.
-[] When wrong, say it's wrong. (Bonus: make encouraging message, using LLM and current answer) - Half Done, it just gives error message
-[x] When right, give success message, advance to the next question. 
-[] Add "give me a hint" button. 
-[] Add a "reset db" button
-[] Generate Dall-E image <-- lol I want to do this next
 
+- [x] When people answer, check to see if the answer is right.
+- [] When wrong, say it's wrong. (Bonus: make encouraging message, using LLM and current answer) - Half Done, it just gives error message and calls you an idiot
+- [x] When right, give success message, advance to the next question. 
+- [x] Add "give me a hint" button. 
+- [] Make the give me a hint button actually do something.
+- [] Add a "reset db" button
+- [x] Generate Dall-E Message
+- [] Download the image and re-upload somewhere; it expires after an hour.

@@ -28,7 +28,7 @@ class GameState:
 # Create a global instance of AppState
 game_state = GameState()
 
-os.environ["OPENAI_API_MODEL_NAME"] = 'gpt-3.5-turbo'
+os.environ["OPENAI_API_MODEL_NAME"] = 'gpt-4o' # TURN THIS OFF LATER 
 
 
 def bootstrap_db():

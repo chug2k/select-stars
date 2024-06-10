@@ -29,7 +29,7 @@ class GameTasks():
         We are creating a level for a game that teaches people SQL. To go through SQL, we need to create
         a sample dataset, with sufficient queries. Generate a dataset that is relevant to the narrative.
         Your output should be actual SQL CREATE TABLE and SQL INSERT queries to run, which we can run in a future step.
-        There should be a sufficient number of rows and tables in our dataset to ensure the game is interesting.
+        Generate at least 10 rows of data for each table in the database to be able to play the game.
 
         The narrative is given from the game designer in the previous step. You only output SQL statements.
         """),
