@@ -28,13 +28,14 @@ class GameTasks():
 		return Task(description=dedent("""\
         We are creating a level for a game that teaches people SQL. To go through SQL, we need to create
         a sample dataset, with sufficient queries. Generate a dataset that is relevant to the narrative.
-        Your output should be actual SQL CREATE TABLE and SQL INSERT queries to run, which we can run in a future step.
-        Generate at least 10 rows of data for each table in the database to be able to play the game.
+        Your output should be actual SQL CREATE TABLE and SQL INSERT queries to run in Sqlite, which we can run in a future step.
+        Generate no fewer than 5 rows of data for each table in the database.
 
-        The narrative is given from the game designer in the previous step. You only output SQL statements.
+        The narrative is given from the game designer in the previous step. You only output SQL statements, that are 
+        supported by SQLite.
         """),
         expected_output=dedent("""\
-        Only SQL commands to run to create the relevant tables and insert statements.
+        Only SQL commands to run to create the relevant tables and insert statements to insert at lesat 5 rows of data for each table.
         Don't use any markdown or code block formatting in the output or commentary. 
         Do not include anything other than SQL commands, all ending with a ;. 
         Write all the SQL commands with TEXT field within double quotes.

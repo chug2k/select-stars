@@ -1,55 +1,57 @@
 story_text = f"""
-                       In a world where magic and technology intertwine, you are an aspiring wizard named Merlin who discovers a mysterious tome filled with ancient knowledge. As you delve deeper into the pages, you realize that this book holds the secrets to mastering the mystical language of SQL, a powerful tool that can manipulate data in ways never before imagined.
+In a world where magic and technology intertwine, you step into the shoes of a novice mage seeking to unravel the mysteries of the ancient Library of Data. Legends tell of a powerful oracle hidden within its walls, holding the key to unlocking unimaginable knowledge. As you embark on your journey, you must navigate through the treacherous dungeons of SQL queries, facing challenges and adversaries along the way.
 
-Eager to prove yourself as a worthy apprentice, you embark on a journey to various enchanted realms, each ruled by a different SQL concept. Along the way, you encounter challenges and puzzles that test your problem-solving skills and your understanding of SQL syntax.
+Your mentor, a wise wizard named SQLius, guides you on your quest. He teaches you the ways of SQL, a magical language that allows you to summon and manipulate data with precision. Armed with this knowledge, you delve deeper into the Library, uncovering hidden truths and untold stories.
 
-From the bustling markets of the Query Kingdom to the treacherous dungeons of the Join Forest, you must use your newfound SQL abilities to uncover hidden truths, forge alliances with magical creatures, and ultimately confront the dark wizard who seeks to misuse the power of SQL for his own sinister purposes.
+As you progress through the Library, you encounter strange creatures guarding valuable information. With each query you master, you unlock new abilities and uncover the secrets of the Oracle. But beware, for dark forces also seek to exploit the power within the Library for their own nefarious purposes.
 
-As you progress through the game, you not only hone your SQL skills but also learn valuable lessons about the importance of data integrity, efficiency, and collaboration. In the end, you emerge victorious, having not only saved the realms from destruction but also gained the respect of your peers as a true SQL master.
+In the final showdown, you face off against the sinister sorcerer Datacorruptor, who seeks to twist the Oracle's knowledge for his own gain. With the fate of the Library hanging in the balance, you must use all your SQL skills to outwit and outmaneuver your foe. Only by mastering the language of SQL can you unlock the true power of the Oracle and emerge victorious, fulfilling your destiny as the hero of the Library of Data.
+"""
 
-Are you ready to embark on this epic adventure and unlock the secrets of SQL? The fate of the magical world lies in your hands, young wizard.
-                       """
 dataset_text = f"""
-                         CREATE TABLE Realms (
-    realm_id INTEGER PRIMARY KEY,
-    realm_name TEXT
+CREATE TABLE Characters (
+    character_id INTEGER PRIMARY KEY,
+    name TEXT,
+    class TEXT,
+    level INTEGER
 );
 
-INSERT INTO Realms (realm_id, realm_name) VALUES 
-(1, "Query Kingdom"),
-(2, "Join Forest");
+INSERT INTO Characters (name, class, level) VALUES ("SQLius", "Wizard", 50);
+INSERT INTO Characters (name, class, level) VALUES ("Novice Mage", "Mage", 10);
+INSERT INTO Characters (name, class, level) VALUES ("Runekeeper", "Warlock", 25);
+INSERT INTO Characters (name, class, level) VALUES ("Energia", "Sorcerer", 30);
+INSERT INTO Characters (name, class, level) VALUES ("Mystica", "Druid", 15);
 
-CREATE TABLE Challenges (
-    challenge_id INTEGER PRIMARY KEY,
-    realm_id INTEGER,
-    challenge_name TEXT,
-    difficulty INTEGER
+CREATE TABLE Spells (
+    spell_id INTEGER PRIMARY KEY,
+    name TEXT,
+    type TEXT,
+    power INTEGER
 );
 
-INSERT INTO Challenges (challenge_id, realm_id, challenge_name, difficulty) VALUES
-(1, 1, "Market Puzzle", 3),
-(2, 2, "Dungeon Maze", 5);
+INSERT INTO Spells (name, type, power) VALUES ("Fireball", "Attack", 50);
+INSERT INTO Spells (name, type, power) VALUES ("Heal", "Support", 30);
+INSERT INTO Spells (name, type, power) VALUES ("Lightning Bolt", "Attack", 60);
+INSERT INTO Spells (name, type, power) VALUES ("Protective Shield", "Defense", 40);
+INSERT INTO Spells (name, type, power) VALUES ("Teleport", "Utility", 45);
 
-CREATE TABLE MagicalCreatures (
-    creature_id INTEGER PRIMARY KEY,
-    realm_id INTEGER,
-    creature_name TEXT,
-    power_level INTEGER
+CREATE TABLE Items (
+    item_id INTEGER PRIMARY KEY,
+    name TEXT,
+    type TEXT,
+    value INTEGER
 );
 
-INSERT INTO MagicalCreatures (creature_id, realm_id, creature_name, power_level) VALUES
-(1, 1, "Oracle Owl", 8),
-(2, 2, "Join Dragon", 10);
-
-CREATE TABLE DarkWizard (
-    wizard_id INTEGER PRIMARY KEY,
-    wizard_name TEXT,
-    realm_id INTEGER
-);
-
-INSERT INTO DarkWizard (wizard_id, wizard_name, realm_id) VALUES
-(1, "Malicious Malfoy", 2);"""
-                         
+INSERT INTO Items (name, type, value) VALUES ("Staff", "Weapon", 20);
+INSERT INTO Items (name, type, value) VALUES ("Robe", "Armor", 30);
+INSERT INTO Items (name, type, value) VALUES ("Potion", "Consumable", 10);
+INSERT INTO Items (name, type, value) VALUES ("Ring", "Accessory", 15);
+INSERT INTO Items (name, type, value) VALUES ("Scroll", "Artifact", 25);
+"""
+                           
+                           
+                           
+                           
 questions_text = f"""
     questions:
     - intro: "Welcome to the Query Kingdom! The Oracle Owl has foreseen that only those who master SQL can save our realm from the Maleficent Horde. Let's start by recruiting the most powerful magical creatures to aid us."
@@ -77,3 +79,6 @@ questions_text = f"""
       solution: "SELECT wizard_name, realm_name FROM DarkWizard JOIN Realms ON DarkWizard.realm_id = Realms.realm_id"
       success: "Well done! With Malicious Malfoy's whereabouts known, we can now focus on our final preparations before facing the Maleficent Horde."
                            """
+
+
+dalle_prompt = "An apprentice magician of Hispanic descent stands before the antiquated Hall of Information, encircled by twirling mystic forces and enigmatic symbols reminiscent of advanced data management languages. An aged wizard of South Asian descent, known for his wisdom in these languages, accompanies them. Towering doors of the information hall stand in the grand background, suggesting the immense wisdom concealed within. Photo-realistic, in full high-definition, digital environment resembling popular sandbox video games of the 2010s."
