@@ -17,4 +17,6 @@ right now DEBUG is on, which loads my manually copied and pasted output from gam
 - [] Make the give me a hint button actually do something.
 - [] Add a "reset db" button
 - [x] Generate Dall-E Message
-- [] Download the image and re-upload somewhere; it expires after an hour.
+- [] Download the image and re-upload somewhere; it expires after an hour (not problem for demo)
+
+- [] Long term - allow replayability / resume 
