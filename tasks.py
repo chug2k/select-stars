@@ -50,8 +50,7 @@ class GameTasks():
             and then get more complicated. The questions should be based on the following tables,
             given in the context, from the previous step."""),
             expected_output=dedent("""\
-            Your Final answer must a syntactically correct YAML of ten questions. Do not include markdown formatting, 
-            generate YAML only. Follow the format given below. 
+            Your Final answer must be a syntactically correct YAML of ten questions. Follow the format given below. 
             
             questions:
                 - intro: "We'll need help to defeat the Maleficient Horde. Help us recruit a fellowship of the five most powerful wizards!"
@@ -63,6 +62,7 @@ class GameTasks():
             The prompt should be a good fit for the narrative, and it should be a good fit for the SQL concept.
             The solution should be clean, simple SQL that solves the question, and be instructional. 
             The success message should be fun and engaging, and it should be a good fit for the narrative, and transition us into the next question.
+			Do not include markdown formatting, neither triple quotes code blocks. Generate YAML only.
 			"""),
 			agent=agent,
 			callback=callback

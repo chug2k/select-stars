@@ -1,5 +1,7 @@
 import os
 from dotenv import load_dotenv
+
+from companion import GameCompanion
 load_dotenv()
 
 import chainlit as cl
@@ -24,9 +26,13 @@ class GameState:
     
     def get_current_question(self):
         return self.questions[self.current_question]
+    
+    def get_current_success(self):
+        return self.questions[self.current_question-1]['success']
 
 # Create a global instance of AppState
 game_state = GameState()
+game_companion = None
 
 os.environ["OPENAI_API_MODEL_NAME"] = 'gpt-4o' # TURN THIS OFF LATER 
 
@@ -60,7 +66,7 @@ async def on_story(output):
     # I think this makes things much more responsive! 
     run_sync(cl.Message(content=game_state.story, disable_feedback=True).send())
 
-def generate_markdown_summary():
+def generate_database_markdown_summary():
     with game_state.db:
         cursor = game_state.db.cursor()
             # List all tables
@@ -141,7 +147,7 @@ async def on_image(output):
 
 @cl.action_callback("Show Tables")
 async def show_tables():
-    await cl.Message(content=generate_markdown_summary(), disable_feedback=True).send()
+    await cl.Message(content=generate_database_markdown_summary(), disable_feedback=True).send()
 
 @cl.action_callback("Start Quest")
 async def start():
@@ -153,14 +159,18 @@ async def start():
     else:
         crew = GameCrew(on_story, on_dataset, on_questions, on_image)
         crew.start_game()
+
     
 @cl.on_chat_start
 async def start():
+    global game_companion
     # Sending an action button within a chatbot message
     actions = [
         cl.Action(name="Start Quest", value="example_value", description="Enter the world")
     ]
     await cl.Message(content="Welcome to SQL Quest! Click Start Quest to begin.", actions=actions, disable_feedback=True).send()
+    game_companion = GameCompanion(context=game_state.story, tables=generate_database_markdown_summary())
+
 
 def format_results(cursor, rows):
     column_names = [description[0] for description in cursor.description]    
@@ -180,9 +190,20 @@ async def ask_next_question():
         cl.Action(name="Get Hint", value="pass", description="This will cost you") 
     ]).send()
 
+    # print(f"Previous solution: {current_question['solution']}")
+    # current_question['solution'] = game_companion.provide_solution(game_state.get_current_question()['prompt'])
+    # print(f"New calculated solution: {current_question['solution']}")
 
-@cl.step
+
+
 async def check_sql(query):
+    response = game_companion.provide_hint(query, game_state.get_current_question()['prompt'], game_state.get_current_question()['solution'])
+    await cl.Message(content=response).send()
+
+    # Suppose the LLM responded some tips instead of "Let's try your query. Let's see if it works."
+    # if len(response) > 100:
+    #     return
+    
     with game_state.db:
         cur = game_state.db.cursor()
         cur.execute(query)
@@ -195,11 +216,11 @@ async def check_sql(query):
         if(output == expected_output):
             game_state.current_question = game_state.current_question + 1
             # TODO: Uh, check to see if we're at the end.
-            await cl.Message(game_state.get_current_question()['success'], disable_feedback=True).send()
+            await cl.Message(game_state.get_current_success(), disable_feedback=True).send()
             # TODO - refactor to make this cleaner, this is ai autocomplete
             await ask_next_question()
         else:
-            await cl.Message(content=f"Try Again Idiot! Your output: {output} but expected {str(expected_output)}").send()
+            await cl.Message(content=f"Try Again! Your output: {output} but expected {str(expected_output)}").send()
 
 @cl.on_message
 async def on_message(message):
