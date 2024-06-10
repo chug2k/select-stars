@@ -54,22 +54,22 @@ auto_tag_thread = true
 
 [UI]
 # Name of the app and chatbot.
-name = "Chatbot"
+name = "SQL Thing"
 
 # Show the readme while the thread is empty.
-show_readme_as_default = true
+show_readme_as_default = false
 
 # Description of the app and chatbot. This is used for HTML tags.
 # description = ""
 
 # Large size content are by default collapsed for a cleaner ui
-default_collapse_content = true
+default_collapse_content = false
 
 # The default value for the expand messages settings.
 default_expand_messages = false
 
 # Hide the chain of thought details from the user in the UI.
-hide_cot = false
+hide_cot = true
 
 # Link to your github repo. This will add a github button in the UI's header.
 # github = ""

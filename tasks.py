@@ -1,6 +1,7 @@
 from textwrap import dedent
 from crewai import Task
 
+
 class GameTasks():
     
 	def generate_story_task(self, agent, callback):
@@ -30,12 +31,11 @@ class GameTasks():
         Your output should be actual SQL CREATE TABLE and SQL INSERT queries to run, which we can run in a future step.
         There should be a sufficient number of rows and tables in our dataset to ensure the game is interesting.
 
-        The narrative is given from the game designer in the previous step.
+        The narrative is given from the game designer in the previous step. You only output SQL statements.
         """),
         expected_output=dedent("""\
-        Only the full SQL commands to run to create the relevant tables and insert statements.
-        Generate the output in SQLite format to be executed in a database management system.
-        Don't use any markdown or code block formatting in the output. 
+        Only SQL commands to run to create the relevant tables and insert statements.
+        Don't use any markdown or code block formatting in the output or commentary. 
         Do not include anything other than SQL commands, all ending with a ;. 
         Write all the SQL commands with TEXT field within double quotes.
         """),
@@ -66,3 +66,21 @@ class GameTasks():
 			agent=agent,
 			callback=callback
 		)
+  
+    # Okay, learned this the hard way - don't generate the image as part of this. 
+    # The Agent will try to retry and stuff and generally just get stuck on the actual generation somehow - 
+    # we just call an API anyway.
+	def generate_image_task(self, agent, callback):
+            return Task(description=dedent("""\
+                We need to generate an image for our game, at AAA-game studio quality, similar to GTA5. 
+                The image should be relevant to the current narrative and should be engaging for the players.
+                Create a short prompt, optimized for use with DALLE-3, and always append FULL HD, photorealistic, GTA5.
+                """),
+                expected_output=dedent("""\
+                Prompt to feed into DallE-3
+                """),
+                agent=agent,
+                callback=callback,
+            )
+
+
