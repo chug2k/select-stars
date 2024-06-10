@@ -10,7 +10,7 @@ tasks = GameTasks()
 
 # This is the standard Game Crew. Initialize it here. 
 class GameCrew:
-    def __init__(self, generate_story_callback, generate_dataset_callback, generate_questions_callback):
+    def __init__(self, generate_story_callback, generate_dataset_callback, generate_questions_callback, generate_image_callback):
     # Load environment variables from .env file
         load_dotenv()
 
@@ -19,12 +19,14 @@ class GameCrew:
         # Create Agents
         self.game_designer = agents.game_designer_agent()
         self.game_engineer = agents.game_engineer_agent()
+        self.game_artist = agents.game_artist_agent()
         # qa_engineer = agents.chief_qa_engineer_agent()
 
         # Create Tasks
         self.generate_story = tasks.generate_story_task(self.game_designer, lambda output: asyncio.run(generate_story_callback(output)))
         # generate_level = tasks.generate_first_level_task(technical_creator_agent)
         # We'll generate levels later, but I think for now we can just have one level. 
+        self.generate_image = tasks.generate_image_task(self.game_artist, lambda output: asyncio.run(generate_image_callback(output)))
         self.generate_dataset = tasks.generate_dataset_task(self.game_engineer, lambda output: asyncio.run(generate_dataset_callback(output)))
         self.generate_questions = tasks.generate_questions_task(self.game_engineer, lambda output: asyncio.run(generate_questions_callback(output)))
         # generate_solutions = tasks.generate_solutions_task(game_engineer)
@@ -39,6 +41,7 @@ class GameCrew:
             ],
             tasks=[
                 self.generate_story,
+                self.generate_image,
                 # generate_level,
                 self.generate_dataset,
                 self.generate_questions,

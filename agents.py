@@ -37,3 +37,14 @@ class GameAgents():
 			allow_delegation=True,
 			verbose=True
 		)
+  
+	def game_artist_agent(self):
+		return Agent(
+			role='Senior Game Artist',
+			goal='Generate captivating, high-quality art that really helps the player enjoy the game.',
+			backstory=dedent("""\
+				You want our customers to have a really fun and immersive game experience, 
+				and you realize game art is a big part of that so you create the highest quality, polished art."""),
+			allow_delegation=False,
+			verbose=True
+		)
