@@ -126,7 +126,8 @@ async def on_questions(output):
     await ask_next_question()
     
 async def on_image(output):
-    return
+    if DEBUG is True:
+        return
     print("Got image prompt")
     print(output.raw_output)
     def generate_image(prompt: str) -> str:
