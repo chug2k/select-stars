@@ -1,7 +1,5 @@
 from textwrap import dedent
 from crewai import Agent
-import os
-os.environ['OPENAI_MODEL_NAME'] = 'gpt-3.5-turbo'
 
 class GameAgents():
 	def game_designer_agent(self):

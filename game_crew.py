@@ -14,8 +14,6 @@ class GameCrew:
     # Load environment variables from .env file
         load_dotenv()
 
-        # os.environ["OPENAI_API_MODEL_NAME"] = 'gpt-3.5-turbo'
-
         # Create Agents
         self.game_designer = agents.game_designer_agent()
         self.game_engineer = agents.game_engineer_agent()

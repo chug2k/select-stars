@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from companion import GameCompanion
 load_dotenv()
 
+
 import chainlit as cl
 from openai import AsyncOpenAI
 from chainlit.playground.providers.openai import ChatOpenAI
@@ -33,9 +34,6 @@ class GameState:
 # Create a global instance of AppState
 game_state = GameState()
 game_companion = None
-
-os.environ["OPENAI_API_MODEL_NAME"] = 'gpt-4o' # TURN THIS OFF LATER 
-
 
 def bootstrap_db():
     # Define the path to your SQLite database
@@ -128,6 +126,7 @@ async def on_questions(output):
     await ask_next_question()
     
 async def on_image(output):
+    return
     print("Got image prompt")
     print(output.raw_output)
     def generate_image(prompt: str) -> str:
@@ -187,7 +186,6 @@ async def ask_next_question():
     msg_content = current_question['intro'] +  "\n\n**" + current_question['prompt'] + "**\n\n&nbsp;"
     await cl.Message(content=msg_content, disable_feedback=True, actions=[
         cl.Action(name="Show Tables", value="pass", description="Does a DESCRIBE TABLES")   ,
-        cl.Action(name="Get Hint", value="pass", description="This will cost you") 
     ]).send()
 
     # print(f"Previous solution: {current_question['solution']}")
